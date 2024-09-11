@@ -5,6 +5,7 @@ class Store {
   constructor(initState = {}) {
     this.state = initState;
     this.listeners = []; // Слушатели изменений состояния
+    this.maxNum = 0;
   }
 
   /**
@@ -34,18 +35,27 @@ class Store {
    */
   setState(newState) {
     this.state = newState;
-    // Вызываем всех слушателей
     for (const listener of this.listeners) listener();
+  }
+
+  setNum(num) {
+    if (num > this.maxNum) {
+      this.maxNum = num;
+    }
   }
 
   /**
    * Добавление новой записи
    */
   addItem() {
-    this.setState({
-      ...this.state,
-      list: [...this.state.list, { code: this.state.list.length + 1, title: 'Новая запись' }],
-    });
+    (this.maxNum = this.maxNum + 1),
+      this.setState({
+        ...this.state,
+        list: [
+          ...this.state.list,
+          { code: this.maxNum, title: 'Новая запись', counter: 0, selected: false },
+        ],
+      });
   }
 
   /**
@@ -67,10 +77,12 @@ class Store {
     this.setState({
       ...this.state,
       list: this.state.list.map(item => {
-        if (item.code === code) {
-          item.selected = !item.selected;
-        }
-        return item;
+        const isSelected = item.code === code ? !item.selected : false;
+        return {
+          ...item,
+          selected: isSelected,
+          counter: isSelected ? item.counter + 1 : item.counter,
+        };
       }),
     });
   }
