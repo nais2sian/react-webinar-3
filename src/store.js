@@ -38,9 +38,9 @@ class Store {
     for (const listener of this.listeners) listener();
   }
 
-  setNum(num) {
-    if (num > this.maxNum) {
-      this.maxNum = num;
+  defCode(code) {
+    if (code > this.maxNum) {
+      this.maxNum = code;
     }
   }
 
