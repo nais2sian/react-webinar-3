@@ -3,3 +3,12 @@
   justify-content: flex-end;
   padding: 20px;
 }
+
+.Total {
+  font-weight: bold;
+}
+
+.ToBasket {
+  margin-left: 10px;
+  width: 80px;
+}

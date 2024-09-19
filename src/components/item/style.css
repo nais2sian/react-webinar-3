@@ -2,11 +2,11 @@
   display: flex;
   justify-content: flex-start;
   transition: background-color 1s;
+  border-top: 1px dashed #ccc;
 }
 
-.Item_selected {
-  background: #75aaf1;
-  color: #fff;
+.Item:last-child {
+  border-bottom: 1px dashed #ccc;
 }
 
 .Item-code {
@@ -16,6 +16,13 @@
 .Item-title {
   width: 100%;
   padding: 20px 10px;
+}
+
+.Item-price {
+  width: 100%;
+  padding: 20px 10px;
+  display: flex;
+  justify-content: flex-end;
 }
 
 .Item-actions {

@@ -1,11 +1,33 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { plural } from '../../utils';
 import './style.css';
 
-function Controls({ onAdd }) {
+function Controls({ totalItems, onOpenCart, totalPrice }) {
   return (
     <div className="Controls">
-      <button onClick={() => onAdd()}>Добавить</button>
+     <div>
+  В корзине:
+  <span className="Total">
+    {' '}
+    {totalItems > 0 ? (
+      <>
+        {totalItems}{' '}
+        {plural(totalItems, {
+          one: 'товар',
+          few: 'товара',
+          many: 'товаров',
+        })}
+        {' / '}
+        {totalPrice + ' ₽'}
+      </>
+    ) : (
+      'пусто'
+    )}
+  </span>
+  {' '}
+  <button className="ToBasket" onClick={onOpenCart}>Перейти</button>
+</div>
     </div>
   );
 }
@@ -15,7 +37,7 @@ Controls.propTypes = {
 };
 
 Controls.defaultProps = {
-  onAdd: () => {},
+  openModal: () => {},
 };
 
 export default React.memo(Controls);
