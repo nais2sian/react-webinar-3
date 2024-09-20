@@ -1,32 +1,38 @@
-.Item {
+.item {
   display: flex;
   justify-content: flex-start;
-  transition: background-color 1s;
+  height: 60px;
   border-top: 1px dashed #ccc;
+  transition: background-color 1s;
 }
 
-.Item:last-child {
-  border-bottom: 1px dashed #ccc;
+.item__code {
+  padding: 20px 10px 20px 19px;
 }
 
-.Item-code {
-  padding: 20px 10px 20px 20px;
-}
-
-.Item-title {
+.item__title {
   width: 100%;
-  padding: 20px 10px;
+  padding: 20px;
 }
 
-.Item-price {
-  width: 100%;
-  padding: 20px 10px;
+.item__price {
   display: flex;
   justify-content: flex-end;
+  width: 100%;
+  padding: 20px 24px;
 }
 
-.Item-actions {
+.item__number {
+  display: flex;
+  justify-content: flex-end;
+  width: 20%;
+  padding: 20px 24px 20px 0;
+}
+
+.item__actions {
   display: flex;
   justify-content: flex-end;
   padding: 20px 20px 20px 10px;
 }
+
+

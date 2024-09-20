@@ -1,5 +1,3 @@
-import { generateCode } from './utils';
-
 /**
  * Хранилище состояния приложения
  */
@@ -8,9 +6,10 @@ class Store {
     this.state = initState;
     this.listeners = [];
     this.state.basket = this.state.basket || [];
-    this.state.total = 0;
-    this.state.totalPrice = 0;
-    this.state.uniqueTotal = 0;
+    this.state.total = this.state.total || 0;
+    this.state.totalPrice = this.state.totalPrice || 0;
+    this.state.uniqueTotal = this.state.uniqueTotal || 0;
+    this.list = this.state.list || [];
   }
 
   subscribe(listener) {
@@ -26,28 +25,34 @@ class Store {
 
   setState(newState) {
     this.state = { ...this.state, ...newState };
-    console.log('Новое состояние: ', this.state);
     for (const listener of this.listeners) listener();
   }
 
-  addItem(code, title, price) {
+  addItem(code) {
+    const product = this.list.find(item => item.code === code);
+    if (!product) {
+      console.error(`Товар с кодом ${code} не найден`);
+      return;
+    }
     const existingItem = this.state.basket.find(item => item.code === code);
-    let newTotal, newTotalPrice, newBasket, newUniqueTotal;
+    let newBasket, newTotal, newTotalPrice, newUniqueTotal;
 
     if (existingItem) {
       newBasket = this.state.basket.map(item =>
         item.code === code ? { ...item, quantity: item.quantity + 1 } : item,
       );
       newTotal = this.state.total + 1;
-      newTotalPrice = this.state.totalPrice + Number(price);
+      newTotalPrice = this.state.totalPrice + Number(product.price);
       newUniqueTotal = this.state.uniqueTotal;
     } else {
-      newBasket = [...this.state.basket, { code, price, title, quantity: 1 }];
+      newBasket = [
+        ...this.state.basket,
+        { code, price: product.price, title: product.title, quantity: 1 },
+      ];
       newTotal = this.state.total + 1;
-      newTotalPrice = this.state.totalPrice + Number(price);
+      newTotalPrice = this.state.totalPrice + Number(product.price);
       newUniqueTotal = this.state.uniqueTotal + 1;
     }
-
     this.setState({
       basket: newBasket,
       total: newTotal,

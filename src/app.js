@@ -1,9 +1,10 @@
 import React, { useCallback, useState, useEffect } from 'react';
-import List from './components/list';
+import ProductList from './components/productList';
 import Controls from './components/controls';
 import Head from './components/head';
 import PageLayout from './components/page-layout';
-import CartModal from './components/cart';
+import Modal from './components/modal';
+import Cart from './components/cart';
 
 /**
  * Приложение
@@ -13,30 +14,9 @@ import CartModal from './components/cart';
 
 function App({ store }) {
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [totalItems, setTotalItems] = useState(store.total);
-  const [totalPrice, setTotalPrice] = useState(store.totalPrice);
-  const [uniqueTotal, setUniqueTotal] = useState(store.uniqueTotal);
-
-  useEffect(() => {
-    const handleStoreUpdate = () => {
-      const updatedTotal = store.getState().total;
-      const updatedTotalPrice = store.getState().totalPrice;
-      const updatedUniqueTotal = store.getState().uniqueTotal;
-      console.log('Store обновлен. Текущее количество товаров: ' + updatedTotal);
-      setTotalItems(updatedTotal);
-      setTotalPrice(updatedTotalPrice);
-      setUniqueTotal(updatedUniqueTotal);
-    };
-    const unsubscribe = store.subscribe(handleStoreUpdate);
-    return () => {
-      unsubscribe();
-    };
-  }, [store]);
-
   const openModal = () => setIsModalOpen(true);
   const closeModal = () => setIsModalOpen(false);
-
-  const list = store.getState().list;
+  const { totalPrice, uniqueTotal, list, basket } = store.getState();
 
   const callbacks = {
     onDeleteItem: useCallback(
@@ -54,8 +34,8 @@ function App({ store }) {
     ),
 
     onAddItem: useCallback(
-      (code, title, price) => {
-        store.addItem(code, title, price);
+      code => {
+        store.addItem(code);
       },
       [store],
     ),
@@ -69,15 +49,10 @@ function App({ store }) {
     <PageLayout>
       <Head title="Магазин" />
       <Controls totalItems={uniqueTotal} totalPrice={totalPrice} onOpenCart={openModal} />
-      <CartModal
-        isOpen={isModalOpen}
-        onClose={closeModal}
-        list={list}
-        basket={callbacks.getTotal()}
-        totalPrice={totalPrice}
-        onDelete={callbacks.onDeleteItem}
-      />
-      <List list={list} onAddItem={callbacks.onAddItem} />
+      <Modal isOpen={isModalOpen} onClose={closeModal}>
+        <Cart basket={basket} totalPrice={totalPrice} onDelete={callbacks.onDeleteItem} />
+      </Modal>
+      <ProductList list={list} onAction={callbacks.onAddItem} isInCart={false} />
     </PageLayout>
   );
 }

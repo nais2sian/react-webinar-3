@@ -1,30 +1,33 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import './style.css';
+import { formatPrice } from '../../utils';
 
-function Item({ item, onAdd, onDelete, isInCart }) {
-  const handleButtonClick = () => {
-    if (isInCart) {
-      onDelete(item.code);
-    } else {
-      onAdd(item.code, item.title, item.price);
-    }
-  };
-
+function Item({ item, onAction, isInCart }) {
+  const { code, title, price, quantity } = item;
   return (
-    <div className="Item">
-      <div className="Item-code">{item.code}</div>
-      <div className="Item-title">{item.title}</div>
-      <div className="Item-price">{item.price.toLocaleString('ru-RU') + ' ₽'}</div>
-
-      {isInCart && <div className="Item-number">{item.quantity} шт</div>}
-
-      <div className="Item-actions">
-        <button onClick={handleButtonClick}>{isInCart ? 'Удалить' : 'Добавить'}</button>
+    <div className="item">
+      <div className="item__code">{code}</div>
+      <div className="item__title">{title}</div>
+      <div className="item__price">{formatPrice(price)}</div>
+      {isInCart && <div className="item__number">{quantity} шт</div>}
+      <div className="item__actions">
+        <button onClick={() => onAction(code)}>{isInCart ? 'Удалить' : 'Добавить'}</button>
       </div>
     </div>
   );
 }
+
+Item.propTypes = {
+  item: PropTypes.shape({
+    code: PropTypes.number.isRequired,
+    title: PropTypes.string.isRequired,
+    price: PropTypes.number.isRequired,
+    quantity: PropTypes.number,
+  }).isRequired,
+  onAction: PropTypes.func.isRequired,
+  isInCart: PropTypes.bool,
+};
 
 Item.propTypes = {
   item: PropTypes.shape({

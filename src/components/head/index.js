@@ -4,7 +4,7 @@ import './style.css';
 
 function Head({ title }) {
   return (
-    <div className="Head">
+    <div className="head">
       <h1>{title}</h1>
     </div>
   );

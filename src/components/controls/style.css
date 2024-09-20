@@ -1,14 +1,14 @@
-.Controls {
+.controls {
   display: flex;
   justify-content: flex-end;
   padding: 20px;
 }
 
-.Total {
+.controls__total {
   font-weight: bold;
 }
 
-.ToBasket {
+.controls__button {
   margin-left: 10px;
   width: 80px;
 }
