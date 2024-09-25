@@ -10,19 +10,36 @@ class Catalog extends StoreModule {
   initState() {
     return {
       list: [],
+      total: 0,
+      currentPage: 1,
     };
   }
 
-  async load() {
-    const response = await fetch('/api/v1/articles');
-    const json = await response.json();
-    this.setState(
-      {
-        ...this.getState(),
-        list: json.result.items,
-      },
-      'Загружены товары из АПИ',
-    );
+  // Метод для загрузки списка товаров
+  async load(page = 1, limit = 10) {
+    const skip = (page - 1) * limit;
+
+    try {
+      const response = await fetch(`/api/v1/articles?limit=${limit}&skip=${skip}`);
+      const json = await response.json();
+
+      if (json.result && Array.isArray(json.result.items)) {
+        const currentState = this.getState();
+        this.setState(
+          {
+            ...currentState,
+            list: json.result.items,
+            total: json.result.total,
+            currentPage: page,
+          },
+          'Загружены товары из АПИ',
+        );
+      } else {
+        console.error('Ошибка: некорректная структура данных с сервера.', json);
+      }
+    } catch (error) {
+      console.error('Ошибка при загрузке данных с сервера:', error);
+    }
   }
 }
 
