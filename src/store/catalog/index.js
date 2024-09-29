@@ -8,32 +8,63 @@ class Catalog extends StoreModule {
   }
 
   initState() {
+    let savedList = [];
+    let savedTotal = 0;
+    let savedCurrentPage = 1;
+
+    try {
+      const catalogList = localStorage.getItem('catalogList');
+      const catalogTotal = localStorage.getItem('catalogTotal');
+      const catalogCurrentPage = localStorage.getItem('catalogCurrentPage');
+
+      savedList = catalogList ? JSON.parse(catalogList) : [];
+      savedTotal = catalogTotal ? JSON.parse(catalogTotal) : 0;
+      savedCurrentPage = catalogCurrentPage ? Number(catalogCurrentPage) : 1;
+    } catch (error) {
+      console.error('Ошибка при чтении из localStorage:', error);
+    }
+
     return {
-      list: [],
-      total: 0,
-      currentPage: 1,
+      list: savedList,
+      total: savedTotal,
+      currentPage: savedCurrentPage,
+      limit: 10,
     };
   }
 
-  // Метод для загрузки списка товаров
+  get totalPages() {
+    return Math.ceil(this.getState().total / this.getState().limit);
+  }
+
   async load(page = 1, limit = 10) {
     const skip = (page - 1) * limit;
 
     try {
-      const response = await fetch(`/api/v1/articles?limit=${limit}&skip=${skip}`);
+      const response = await fetch(
+        `/api/v1/articles?limit=${limit}&skip=${skip}&fields=items(_id, title, price),count`,
+      );
       const json = await response.json();
 
-      if (json.result && Array.isArray(json.result.items)) {
-        const currentState = this.getState();
+      if (json.result) {
         this.setState(
           {
-            ...currentState,
             list: json.result.items,
-            total: json.result.total,
+            total: json.result.count,
             currentPage: page,
+            limit,
           },
           'Загружены товары из АПИ',
         );
+
+        if (json.result.items && json.result.items.length > 0) {
+          localStorage.setItem('catalogList', JSON.stringify(json.result.items));
+        }
+
+        if (json.result.count !== undefined) {
+          localStorage.setItem('catalogTotal', JSON.stringify(json.result.count));
+        }
+
+        localStorage.setItem('catalogCurrentPage', String(page));
       } else {
         console.error('Ошибка: некорректная структура данных с сервера.', json);
       }

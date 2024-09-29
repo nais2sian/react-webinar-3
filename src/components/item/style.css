@@ -1,26 +1,11 @@
 .Item {
   display: flex;
-  justify-content: flex-start;
+  justify-content: space-between;
   transition: background-color 1s;
-  padding-left: 10px;
-}
-
-.Item_selected {
-  background: #75aaf1;
-  color: #fff;
-}
-
-.Item-code {
-  padding: 20px 10px 20px 20px;
-}
-
-.Item-title {
-  width: 100%;
-  padding: 20px 10px;
+  padding: 20px;
 }
 
 .Item-actions {
-  padding: 20px 20px 20px 10px;
   display: flex;
   justify-content: flex-end;
   align-items: center;

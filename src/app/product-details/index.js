@@ -1,16 +1,17 @@
 import React, { useEffect, useState, memo, useCallback } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import PageLayout from '../../components/page-layout';
 import BasketTool from '../../components/basket-tool';
 import useStore from '../../store/use-store';
 import useSelector from '../../store/use-selector';
 import Head from '../../components/head';
-import { Link } from 'react-router-dom';
-import './style.css';
+import Menu from '../../components/menu';
+import ProductView from '../../components/product-view';
 
 const ProductDetails = () => {
   const { id } = useParams();
   const store = useStore();
+  const navigate = useNavigate();
   const [product, setProduct] = useState(null);
   const [loading, setLoading] = useState(true);
 
@@ -24,7 +25,7 @@ const ProductDetails = () => {
     const fetchProduct = async () => {
       try {
         const response = await fetch(
-          `/api/v1/articles/${id}?fields=*,madeIn(title,code),category(title)`, // URL для загрузки данных о товаре
+          `/api/v1/articles/${id}?fields=*,madeIn(title,code),category(title)`,
         );
         const data = await response.json();
         setProduct(data.result);
@@ -34,7 +35,6 @@ const ProductDetails = () => {
         setLoading(false);
       }
     };
-
     fetchProduct();
   }, [id]);
 
@@ -44,6 +44,9 @@ const ProductDetails = () => {
       [id, store.actions.basket],
     ),
     openModalBasket: useCallback(() => store.actions.modals.open('basket'), [store.actions.modals]),
+    navigateToPage: useCallback(() => {
+      navigate(`/`);
+    }, [navigate]),
   };
 
   if (loading) {
@@ -57,36 +60,21 @@ const ProductDetails = () => {
   const { title, description, madeIn, category, edition, price } = product;
 
   return (
-    <PageLayout>
-      <Head title={title} />
-      <nav>
-        <Link className="link" to="/">
-          Главная
-        </Link>
-      </nav>
+    <PageLayout
+      head={<Head title={title} />}
+      menu={<Menu currentPage={1} onNavigate={callbacks.navigateToPage} />}
+      footer={<div></div>}
+    >
       <BasketTool onOpen={callbacks.openModalBasket} amount={select.amount} sum={select.sum} />
-
-      <div className="details">
-        <div className="details-content">
-          <p>{typeof description === 'string' ? description : 'Описание недоступно'}</p>
-          <p>
-            Страна производитель:{' '}
-            <span>
-              {madeIn?.title || 'Не указана'} {madeIn?.code ? `(${madeIn.code})` : ''}
-            </span>
-          </p>
-          <p>
-            Категория: <span>{category?.title || 'Не указана'}</span>
-          </p>
-          <p>
-            Год выпуска: <span>{edition || 'Не указан'}</span>
-          </p>
-          <p className="details-price">
-            <span>Цена: {typeof price === 'number' ? `${price} ₽` : 'Не указана'}</span>
-          </p>
-          <button onClick={callbacks.addToBasket}>Добавить</button>
-        </div>
-      </div>
+      <ProductView
+        title={title}
+        description={description}
+        madeIn={madeIn}
+        category={category}
+        edition={String(edition)}
+        price={price}
+        onAddToBasket={callbacks.addToBasket}
+      />
     </PageLayout>
   );
 };

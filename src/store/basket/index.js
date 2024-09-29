@@ -2,11 +2,34 @@ import StoreModule from '../module';
 
 class Basket extends StoreModule {
   initState() {
+    let savedList = [];
+    let savedSum = 0;
+    let savedAmount = 0;
+
+    try {
+      const storedList = localStorage.getItem('basketList');
+      const storedSum = localStorage.getItem('basketSum');
+      const storedAmount = localStorage.getItem('basketAmount');
+
+      savedList = storedList ? JSON.parse(storedList) : [];
+      savedSum = storedSum ? Number(storedSum) : 0;
+      savedAmount = storedAmount ? Number(storedAmount) : 0;
+    } catch (error) {
+      console.error('Ошибка при чтении данных корзины из localStorage:', error);
+    }
+
     return {
-      list: [],
-      sum: 0,
-      amount: 0,
+      list: savedList,
+      sum: savedSum,
+      amount: savedAmount,
     };
+  }
+
+  saveStateToLocalStorage() {
+    const { list, sum, amount } = this.getState();
+    localStorage.setItem('basketList', JSON.stringify(list));
+    localStorage.setItem('basketSum', sum);
+    localStorage.setItem('basketAmount', amount);
   }
 
   /**
@@ -15,12 +38,11 @@ class Basket extends StoreModule {
    */
   addToBasket(_id) {
     let sum = 0;
-    // Ищем товар в корзине, чтобы увеличить его количество
     let exist = false;
     const list = this.getState().list.map(item => {
       let result = item;
       if (item._id === _id) {
-        exist = true; // Запомним, что был найден в корзине
+        exist = true;
         result = { ...item, amount: item.amount + 1 };
       }
       sum += result.price * result.amount;
@@ -28,12 +50,8 @@ class Basket extends StoreModule {
     });
 
     if (!exist) {
-      // Поиск товара в каталоге, чтобы его добавить в корзину.
-      // @todo В реальном приложении будет запрос к АПИ вместо поиска по состоянию.
-      console.table(this.store.getState().catalog.list);
       const item = this.store.getState().catalog.list.find(item => item._id === _id);
-      list.push({ ...item, amount: 1 }); // list уже новый, в него можно пушить.
-      // Добавляем к сумме.
+      list.push({ ...item, amount: 1 });
       sum += item.price;
     }
 
@@ -46,6 +64,8 @@ class Basket extends StoreModule {
       },
       'Добавление в корзину',
     );
+
+    this.saveStateToLocalStorage();
   }
 
   /**
@@ -69,6 +89,8 @@ class Basket extends StoreModule {
       },
       'Удаление из корзины',
     );
+
+    this.saveStateToLocalStorage();
   }
 }
 

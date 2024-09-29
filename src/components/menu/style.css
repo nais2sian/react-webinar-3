@@ -1,0 +1,12 @@
+.menu-item {
+  position: absolute;
+  margin-top: 98px;
+  margin-left: 20px;
+  color: #0087e9;
+  font-family: Arial;
+  font-weight: 400;
+  font-size: 18px;
+  line-height: 20.7px;
+  cursor: pointer;
+  text-decoration: underline;
+}

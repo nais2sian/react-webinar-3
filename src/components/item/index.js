@@ -21,9 +21,9 @@ function Item(props) {
 
   return (
     <div className={cn()}>
-      <div className={cn('title')} onClick={callbacks.onClick} style={{ cursor: 'pointer' }}>
+      <span className={cn('title')} onClick={callbacks.onClick} style={{ cursor: 'pointer' }}>
         {props.item.title}
-      </div>
+      </span>
       <div className={cn('actions')}>
         <div className={cn('price')}>{numberFormat(props.item.price)} ₽</div>
         <button onClick={callbacks.onAdd}>Добавить</button>

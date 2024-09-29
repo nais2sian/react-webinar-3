@@ -1,22 +1,11 @@
-/* Пункт списка */
 .ItemBasket {
   display: flex;
-  justify-content: flex-start;
+  justify-content: space-between;
   transition: background-color 1s;
-  padding-left: 10px;
-}
-
-.ItemBasket-code {
-  padding: 20px 10px 20px 20px;
-}
-
-.ItemBasket-title {
-  width: 100%;
-  padding: 20px 10px;
+  padding: 20px;
 }
 
 .ItemBasket-right {
-  padding: 20px 20px 20px 10px;
   display: flex;
   justify-content: flex-end;
   align-items: center;
