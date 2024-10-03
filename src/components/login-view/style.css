@@ -1,0 +1,39 @@
+.Login-content {
+  margin-left: 20px;
+  font-family: Arial;
+}
+
+.Login-title {
+  font-weight: 700;
+  font-size: 24px;
+  line-height: 27.6px;
+}
+
+.Login-form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+span {
+  display: block;
+}
+
+input {
+  display: block;
+  box-sizing: border-box;
+  width: 203px;
+  height: 26px;
+}
+
+.Login-submit {
+  width: 53px;
+  height: 21px;
+}
+
+.error-message {
+  color: #ff0000;
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 18.4px;
+}

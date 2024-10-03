@@ -1,0 +1,19 @@
+.Login-container {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  height: 41px;
+  margin-right: 20px;
+}
+
+.login-button {
+  text-align: center;
+  height: 21px;
+  min-width: 54px;
+}
+
+.profile-link {
+  margin-right: 20px;
+  text-decoration: underline;
+  color: #0087E9;
+}

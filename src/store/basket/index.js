@@ -18,12 +18,11 @@ class BasketState extends StoreModule {
    */
   async addToBasket(_id) {
     let sum = 0;
-    // Ищем товар в корзине, чтобы увеличить его количество
     let exist = false;
     const list = this.getState().list.map(item => {
       let result = item;
       if (item._id === _id) {
-        exist = true; // Запомним, что был найден в корзине
+        exist = true;
         result = { ...item, amount: item.amount + 1 };
       }
       sum += result.price * result.amount;
@@ -31,13 +30,10 @@ class BasketState extends StoreModule {
     });
 
     if (!exist) {
-      // Поиск товара в каталоге, чтобы его добавить в корзину.
       const response = await fetch(`/api/v1/articles/${_id}`);
       const json = await response.json();
       const item = json.result;
-
-      list.push({ ...item, amount: 1 }); // list уже новый, в него можно пушить.
-      // Добавляем к сумме.
+      list.push({ ...item, amount: 1 });
       sum += item.price;
     }
 

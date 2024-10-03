@@ -1,0 +1,26 @@
+.Profile-content {
+  margin-left: 20px;
+  font-family: Arial;
+}
+
+.Profile-title {
+  margin-bottom: 30px;
+  font-weight: 700;
+  font-size: 24px;
+  line-height: 27.6px;
+}
+
+.Profile-item {
+  display: flex;
+  align-items: baseline;
+  gap: 3px;
+  margin-bottom: 20px;
+  font-weight: 400;
+  font-size: 18px;
+  line-height: 20.7px;
+}
+
+.Profile-value {
+  flex-grow: 1;
+  font-weight: bold;
+}
