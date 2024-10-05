@@ -51,37 +51,6 @@ class CatalogState extends StoreModule {
     await this.setParams(params);
   }
 
-  async loadCategories() {
-    const response = await fetch(`/api/v1/categories?fields=_id,title,parent(_id)&limit=*`);
-    const data = await response.json();
-    function formatCategories(categories) {
-      const parentMap = new Map();
-      categories.forEach(cat => {
-        const parentId = cat.parent ? cat.parent._id : 'root';
-        if (!parentMap.has(parentId)) {
-          parentMap.set(parentId, []);
-        }
-        parentMap.get(parentId).push(cat);
-      });
-
-      const buildFormattedList = (parentId, level) => {
-        const children = parentMap.get(parentId) || [];
-        let result = [];
-        children.forEach(child => {
-          result.push({
-            id: child._id,
-            title: `${'-'.repeat(level)} ${child.title}`,
-          });
-          result = result.concat(buildFormattedList(child._id, level + 1));
-        });
-        return result;
-      };
-      return buildFormattedList('root', 0);
-    }
-    const formattedCategories = formatCategories(data.result.items);
-    this.setState({ ...this.getState(), categories: formattedCategories });
-  }
-
   /**
    * Установка параметров и загрузка списка товаров
    * @param [newParams] {Object} Новые параметры

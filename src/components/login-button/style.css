@@ -3,13 +3,14 @@
   justify-content: flex-end;
   align-items: center;
   height: 41px;
-  margin-right: 20px;
+  width: 100%;
 }
 
 .login-button {
   text-align: center;
   height: 21px;
-  min-width: 54px;
+  width: 59px;
+  margin-right: 20px;
 }
 
 .profile-link {

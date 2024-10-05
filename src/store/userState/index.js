@@ -1,7 +1,7 @@
 import StoreModule from '../module';
 
 /**
- * Состояние пользователя - авторизация и профиль
+ * Состояние пользователя - авторизация и сессия
  */
 class UserState extends StoreModule {
   /**
@@ -12,24 +12,22 @@ class UserState extends StoreModule {
     return {
       token: localStorage.getItem('userToken') || null,
       isAuthenticated: !!localStorage.getItem('userToken'),
-      userData: {}, // Профиль пользователя
+      sessionUserData: {},
       loading: false,
       error: null,
     };
   }
+
   /**
    * Авторизация пользователя
    * @param {Object} credentials (логин, пароль)
    */
   async login(credentials) {
-    this.setState(
-      {
-        ...this.getState(),
-        loading: true,
-        error: null,
-      },
-      'Начало процесса авторизации',
-    );
+    this.setState({
+      ...this.getState(),
+      loading: true,
+      error: null,
+    }, 'Начало процесса авторизации');
 
     try {
       const response = await fetch('/api/v1/users/sign', {
@@ -42,45 +40,68 @@ class UserState extends StoreModule {
       if (response.ok && data.result.token) {
         this.setState({ token: data.result.token, isAuthenticated: true, loading: false });
         localStorage.setItem('userToken', data.result.token);
-        await this.fetchProfile(data.result.token);
+        await this.fetchSessionProfile(data.result.token);
         return data;
       } else {
-        this.setState({ loading: false, error: data.message || 'Ошибка авторизации' });
+        throw new Error(data.error ? data.error.message : 'Authentication failed');
       }
     } catch (error) {
-      this.setState({ loading: false, error: error.message || 'Ошибка соединения' });
-    }
-  }
-
-  logout() {
-    localStorage.removeItem('userToken');
-    this.setState({
-      token: null,
-      isAuthenticated: false,
-      userData: {},
-    });
-  }
-
-  async checkAuth() {
-    const { token } = this.getState();
-    if (token) {
-      await this.fetchProfile(token);
-    } else {
-      this.setState({ isAuthenticated: false });
+      this.setState({ loading: false, error: error.message });
+      throw error;
     }
   }
 
   /**
-   * Загрузка профиля пользователя
+   * Очистка ошибок
+   */
+  errorCleaning() {
+    this.setState({
+      ...this.getState(),
+      error: null,
+    });
+  }
+
+  /**
+   * Выход из системы
+   */
+  async logout() {
+    const token = localStorage.getItem('userToken');
+    try {
+      const response = await fetch('/api/v1/users/sign', {
+        method: 'DELETE',
+        headers: {
+          'Content-Type': 'application/json',
+          'X-Token': token,
+        },
+      });
+
+      if (response.ok) {
+        console.log('Токен удален');
+      } else {
+        console.error('Не удалось удалить токен:', response.status);
+      }
+    } catch (error) {
+      console.error('Ошибка удаления токена:', error);
+    }
+    localStorage.removeItem('userToken');
+    this.setState({
+      token: null,
+      isAuthenticated: false,
+      sessionUserData: {},
+    });
+  }
+
+  /**
+   * Загрузка профиля текущего пользователя
    * @param {string} token Токен пользователя
    */
-  async fetchProfile(token) {
+  async fetchSessionProfile(token) {
     this.setState(
       {
         ...this.getState(),
         loading: true,
       },
-      'Загрузка профиля пользователя',
+      'Загрузка профиля сессии пользователя',
     );
     try {
       const response = await fetch(`/api/v1/users/self?fields=*`, {
@@ -91,24 +112,23 @@ class UserState extends StoreModule {
         },
       });
       const json = await response.json();
-      console.table(json.result),
-        this.setState(
-          {
-            ...this.getState(),
-            userData: json.result,
-            loading: false,
-          },
-          'Профиль пользователя загружен',
-        );
+      this.setState(
+        {
+          ...this.getState(),
+          sessionUserData: json.result,
+          loading: false,
+        },
+        'Профиль сессии пользователя загружен',
+      );
     } catch (error) {
       this.setState(
         {
           ...this.getState(),
           loading: false,
-          userData: {},
-          error: 'Ошибка загрузки профиля',
+          sessionUserData: {},
+          error: 'Ошибка загрузки профиля сессии',
         },
-        'Ошибка при загрузке профиля пользователя',
+        'Ошибка при загрузке профиля сессии',
       );
     }
   }

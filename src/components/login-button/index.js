@@ -1,7 +1,6 @@
-import { memo } from 'react';
 import PropTypes from 'prop-types';
-import './style.css';
 import { Link } from 'react-router-dom';
+import './style.css';
 
 function Login({ onClick, title, name, link }) {
   return (

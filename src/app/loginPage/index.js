@@ -10,6 +10,7 @@ import LocaleSelect from '../../containers/locale-select';
 import LoginView from '../../components/login-view';
 import useStore from '../../hooks/use-store';
 import AuthButton from '../authButton';
+import useTranslate from '../../hooks/use-translate';
 
 const LoginPage = () => {
   const navigate = useNavigate();
@@ -30,7 +31,8 @@ const LoginPage = () => {
     store.actions.userState
       .login(credentials)
       .then(() => {
-        navigate('/profile');
+        navigate(-1);
+        // navigate('/profile');
       })
       .catch(error => {
         console.error('Ошибка при авторизации:', error);
@@ -39,11 +41,12 @@ const LoginPage = () => {
 
   const onChangeLogin = e => setLogin(e.target.value);
   const onChangePassword = e => setPassword(e.target.value);
+  const { t } = useTranslate();
 
   return (
     <PageLayout>
       <AuthButton />
-      <Head title={select.article.title}>
+      <Head title={t('title')}>
         <LocaleSelect />
       </Head>
       <Navigation />
