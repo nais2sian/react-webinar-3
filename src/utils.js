@@ -48,9 +48,10 @@ export function formatCategories(categories) {
     const children = parentMap.get(parentId) || [];
     let result = [];
     children.forEach(child => {
+      const prefix = Array(level).fill('- ').join('');
       result.push({
         id: child._id,
-        title: `${'-'.repeat(level)} ${child.title}`,
+        title: `${prefix}${child.title}`,
       });
       result = result.concat(buildFormattedList(child._id, level + 1));
     });

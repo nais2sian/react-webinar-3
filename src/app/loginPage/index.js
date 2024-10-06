@@ -31,8 +31,8 @@ const LoginPage = () => {
     store.actions.userState
       .login(credentials)
       .then(() => {
-        navigate(-1);
-        // navigate('/profile');
+        // navigate(-1);
+        navigate('/profile');
       })
       .catch(error => {
         console.error('Ошибка при авторизации:', error);

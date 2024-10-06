@@ -23,11 +23,14 @@ class UserState extends StoreModule {
    * @param {Object} credentials (логин, пароль)
    */
   async login(credentials) {
-    this.setState({
-      ...this.getState(),
-      loading: true,
-      error: null,
-    }, 'Начало процесса авторизации');
+    this.setState(
+      {
+        ...this.getState(),
+        loading: true,
+        error: null,
+      },
+      'Начало процесса авторизации',
+    );
 
     try {
       const response = await fetch('/api/v1/users/sign', {
@@ -43,7 +46,15 @@ class UserState extends StoreModule {
         await this.fetchSessionProfile(data.result.token);
         return data;
       } else {
-        throw new Error(data.error ? data.error.message : 'Authentication failed');
+        const issues = data.error?.data?.issues;
+        let message = 'Authentication failed';
+
+        if (issues && issues.length > 0) {
+          message = issues[0]?.message || 'Unknown error occurred';
+        }
+
+        this.setState({ loading: false, error: message });
+        throw new Error(message);
       }
     } catch (error) {
       this.setState({ loading: false, error: error.message });

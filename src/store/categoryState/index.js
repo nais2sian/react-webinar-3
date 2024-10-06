@@ -28,6 +28,7 @@ class CategoryState extends StoreModule {
         throw new Error('Network response was not ok');
       }
       const data = await response.json();
+      console.log(data)
       this.setState({
         categories: data.result.items,
         loading: false,

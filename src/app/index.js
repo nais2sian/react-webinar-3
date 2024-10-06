@@ -8,6 +8,7 @@ import ProfilePage from './profilePage';
 import ProtectedRoute from './../appProtectedRoute';
 import { useEffect } from 'react';
 import useStore from '../hooks/use-store';
+import RedirectRoute from '../appRedirectRoute';
 
 /**
  * Приложение
@@ -22,14 +23,21 @@ function App() {
     if (token && isAuthenticated) {
       store.actions.userState.fetchSessionProfile(token);
     }
-  }, [token, isAuthenticated]);
+  }, [token, isAuthenticated, store.actions.userState]);
 
   return (
     <>
       <Routes>
         <Route path={''} element={<Main />} />
         <Route path={'/articles/:id'} element={<Article />} />
-        <Route path={'/login'} element={<LoginPage />} />
+        <Route
+          path={'/login'}
+          element={
+            <RedirectRoute>
+              <LoginPage />
+            </RedirectRoute>
+          }
+        />
         <Route
           path={'/profile'}
           element={
