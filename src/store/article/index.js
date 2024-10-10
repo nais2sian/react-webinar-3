@@ -6,7 +6,7 @@ import StoreModule from '../module';
 class ArticleState extends StoreModule {
   initState() {
     return {
-      data: {},
+      data: [],
       waiting: false, // признак ожидания загрузки
     };
   }
@@ -19,7 +19,7 @@ class ArticleState extends StoreModule {
   async load(id) {
     // Сброс текущего товара и установка признака ожидания загрузки
     this.setState({
-      data: {},
+      data: [],
       waiting: true,
     });
 
@@ -40,7 +40,7 @@ class ArticleState extends StoreModule {
       // Ошибка при загрузке
       // @todo В стейт можно положить информацию об ошибке
       this.setState({
-        data: {},
+        data: [],
         waiting: false,
       });
     }

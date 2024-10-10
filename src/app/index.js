@@ -1,6 +1,4 @@
-import { useCallback, useContext, useEffect, useState } from 'react';
 import { Routes, Route } from 'react-router-dom';
-import useSelector from '../hooks/use-selector';
 import useStore from '../hooks/use-store';
 import useInit from '../hooks/use-init';
 import Main from './main';
