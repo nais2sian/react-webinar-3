@@ -52,7 +52,8 @@ function Login() {
           navigate(back);
         });
       },
-      [data, location.state],
+      [data, location.state, navigate, store.actions.session]
+      // [data, location.state],
     ),
   };
 

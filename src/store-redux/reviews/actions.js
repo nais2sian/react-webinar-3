@@ -51,6 +51,10 @@ export default {
             },
           };
         }
+
+        if (!newComment.dateCreate) {
+          newComment.dateCreate = new Date().toISOString();
+        }
         dispatch({ type: 'reviews/add-success', payload: newComment });
       } catch (error) {
         console.error('Ошибка при добавлении комментария:', error);

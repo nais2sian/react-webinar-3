@@ -1,35 +1,54 @@
 /**
- * Преобразование списка в иерархию
- * @param list {Array} Список объектов с отношением на родителя
- * @param [key] {String} Свойство с первичным ключом
- * @returns {Array} Корневые узлы
+ * Преобразование списка в иерархию с учётом типов родителей, сортировкой
+ * @param {Array} list
+ * @param {Object} [options]
+ * @param {String} [options.key='_id']
+ * @param {String} [options.typeKey='_type']
+ * @param {Array} [options.rootTypes=['article']]
+ * @param {String} [options.childrenKey='replies']
+ * @param {String} [options.sortKey='dateCreate']
+ * @returns {Array}
  */
-export default function listToTree(list, key = '_id') {
-  let trees = {};
-  let roots = {};
-  for (const item of list) {
-    // Добавление элемента в индекс узлов и создание свойства children
-    if (!trees[item[key]]) {
-      trees[item[key]] = item;
-      trees[item[key]].children = [];
-      // Ещё никто не ссылался, поэтому пока считаем корнем
-      roots[item[key]] = trees[item[key]];
-    } else {
-      trees[item[key]] = Object.assign(trees[item[key]], item);
-    }
+export default function listToTree(list, options = {}) {
+  const {
+    key = '_id',
+    typeKey = '_type',
+    rootTypes = ['article'],
+    childrenKey = 'replies',
+    sortKey = 'dateCreate',
+  } = options;
 
-    // Если элемент имеет родителя, то добавляем его в подчиненные родителя
-    if (item.parent?.[key]) {
-      // Если родителя ещё нет в индексе, то индекс создаётся, ведь _id родителя известен
-      if (!trees[item.parent[key]]) {
-        trees[item.parent[key]] = { children: [] };
-        roots[item.parent[key]] = trees[item.parent[key]];
-      }
-      // Добавления в подчиненные родителя
-      trees[item.parent[key]].children.push(trees[item[key]]);
-      // Так как элемент добавлен к родителю, то он уже не является корневым
-      if (roots[item[key]]) delete roots[item[key]];
-    }
+  if (!Array.isArray(list)) {
+    console.error('Expected an array, got:', list);
+    return [];
   }
-  return Object.values(roots);
+  const sortedList = [...list].sort((a, b) => new Date(a[sortKey]) - new Date(b[sortKey]));
+  const map = {};
+  const roots = [];
+  sortedList.forEach(item => {
+    map[item[key]] = { ...item, [childrenKey]: [] };
+  });
+  sortedList.forEach(item => {
+    const parent = item.parent;
+    if (parent && parent[typeKey] && !rootTypes.includes(parent[typeKey])) {
+      const parentId = parent[key];
+      if (map[parentId]) {
+        map[parentId][childrenKey].push(map[item[key]]);
+      } else {
+        roots.push(map[item[key]]);
+      }
+    } else {
+      roots.push(map[item[key]]);
+    }
+  });
+  const sortChildren = node => {
+    if (node[childrenKey] && node[childrenKey].length > 0) {
+      node[childrenKey].sort((a, b) => new Date(a[sortKey]) - new Date(b[sortKey]));
+      node[childrenKey].forEach(child => sortChildren(child));
+    }
+  };
+
+  roots.forEach(root => sortChildren(root));
+
+  return roots;
 }

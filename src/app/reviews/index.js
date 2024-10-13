@@ -1,17 +1,20 @@
 import { memo } from 'react';
+import React, { useRef, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import useInit from '../../hooks/use-init';
 import { useSelector as useReduxSelector } from 'react-redux';
 import { useDispatch } from 'react-redux';
 import useSelector from '../../hooks/use-selector';
 import reviewsActions from '../../store-redux/reviews/actions';
-import { buildCommentsTree } from '../../utils/comments-to-tree';
+import listToTree from '../../utils/list-to-tree';
 import CommentsForm from '../../containers/comments-form';
-import CommentsList from '../../components/comments-list';
+import CommentContainer from '../../containers/comment';
 import NoComments from '../../components/no-comments';
 import Spinner from '../../components/spinner';
 
 function Reviews() {
+  const location = useLocation();
   const dispatch = useDispatch();
   const { id: articleId } = useParams();
   const select = useSelector(state => ({
@@ -29,10 +32,18 @@ function Reviews() {
   }));
 
   const commentsArray = reviews || [];
-  const commentsTree = buildCommentsTree(commentsArray);
+  const commentsTree = listToTree(commentsArray, '_id');
+
   const handleReply = commentId => {
     dispatch(reviewsActions.setReplyTo(commentId));
   };
+
+  const formRef = useRef(null);
+  useEffect(() => {
+    if (!replyTo && select.exists && formRef.current) {
+      formRef.current.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+  }, [replyTo, select.exists]);
 
   if (waiting) {
     return <Spinner />;
@@ -43,19 +54,21 @@ function Reviews() {
   }
   return (
     <div style={{ marginLeft: '10px', marginRight: '40px' }}>
-      <CommentsList
-        commentsTree={commentsTree}
-        replyTo={replyTo}
-        onReply={handleReply}
-        totalComments={commentsArray.length}
-      />
-      {!replyTo && select.exists && <CommentsForm parentId={articleId} />}
+      {commentsTree.map(comment => (
+        <CommentContainer key={comment._id} comment={comment} onReply={handleReply} level={0} />
+      ))}
+
+      <div ref={formRef}>{!replyTo && select.exists && <CommentsForm parentId={articleId} />}</div>
       {!replyTo && !select.exists && (
-        <p className="comment-warn">
-          <a href="/login" style={{ marginLeft: '30px' }}>
-            Войдите,
-          </a>{' '}
-          чтобы иметь возможность комментировать
+        <p style={{ marginLeft: '30px' }}>
+          <Link
+            to="/login"
+            className="comment-warn"
+            state={{ back: location.pathname + location.search }}
+          >
+            Войдите
+          </Link>
+          , чтобы иметь возможность комментировать
         </p>
       )}
     </div>

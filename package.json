@@ -21,6 +21,7 @@
   "dependencies": {
     "@bem-react/classname": "^1.6.0",
     "axios": "^1.7.7",
+    "immer": "^10.1.1",
     "lodash.debounce": "^4.0.8",
     "lodash.throttle": "^4.1.1",
     "prop-types": "^15.8.1",
