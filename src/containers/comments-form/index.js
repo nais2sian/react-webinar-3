@@ -14,15 +14,14 @@ const CommentsForm = ({ parentId }) => {
   const formTitle = isNewComment ? 'Новый комментарий' : 'Новый ответ';
   const select = useSelector(state => ({
     name: state.session.user?.profile?.name || '',
+    _id: state.session.user._id,
   }));
-
 
   const handleSubmit = e => {
     e.preventDefault();
-
     console.log('Форма отправлена');
     const targetType = targetId === articleId ? 'article' : 'comment';
-    dispatch(reviewsActions.addNewComment(targetId, text, targetType, select.name));
+    dispatch(reviewsActions.addNewComment(targetId, text, targetType, select.name, select._id));
     setText('');
     dispatch(reviewsActions.clearReplyTo());
   };

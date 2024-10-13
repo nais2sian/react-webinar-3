@@ -24,26 +24,18 @@ function reducer(state = initialState, action) {
       return { ...state, replyTo: null };
 
     case 'reviews/add-start':
-      return { ...state, waiting: true };
+      return { ...state};
 
     case 'reviews/add-success':
       return produce(state, draft => {
-        draft.data.push(action.payload); // Безопасное использование push
+        draft.data.push(action.payload);
         draft.data.sort(
           (a, b) => new Date(a.dateCreate) - new Date(b.dateCreate)
         );
-        draft.waiting = false;
       });
-    //   const newComment = action.payload;
-    //   return {
-    //     ...state,
-    //     data: [...state.data, newComment],
-    //     waiting: false,
-    //   };
-    // }
 
     case 'reviews/add-error':
-      return { ...state, waiting: false };
+      return { ...state};
 
     default:
       return state;

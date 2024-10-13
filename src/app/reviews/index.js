@@ -23,7 +23,7 @@ function Reviews() {
 
   useInit(() => {
     dispatch(reviewsActions.load(articleId));
-  }, [articleId]);
+  }, []);
 
   const { reviews, waiting, replyTo } = useReduxSelector(state => ({
     reviews: state.reviews.data || [],
@@ -38,13 +38,6 @@ function Reviews() {
     dispatch(reviewsActions.setReplyTo(commentId));
   };
 
-  const formRef = useRef(null);
-  useEffect(() => {
-    if (!replyTo && select.exists && formRef.current) {
-      formRef.current.scrollIntoView({ behavior: 'smooth', block: 'start' });
-    }
-  }, [replyTo, select.exists]);
-
   if (waiting) {
     return <Spinner />;
   }
@@ -52,13 +45,17 @@ function Reviews() {
   if (commentsArray.length === 0) {
     return <NoComments articleId={articleId} exists={select.exists} />;
   }
+
+  const totalComments=commentsArray.length
+
   return (
     <div style={{ marginLeft: '10px', marginRight: '40px' }}>
+      {totalComments && <h3 style={{ margin: '30px 0 25px 30px'}}>Комментарии ({totalComments})</h3>}
       {commentsTree.map(comment => (
-        <CommentContainer key={comment._id} comment={comment} onReply={handleReply} level={0} />
+        <CommentContainer key={comment._id} comment={comment} onReply={handleReply} level={0}/>
       ))}
 
-      <div ref={formRef}>{!replyTo && select.exists && <CommentsForm parentId={articleId} />}</div>
+      <div>{!replyTo && select.exists && <CommentsForm parentId={articleId} />}</div>
       {!replyTo && !select.exists && (
         <p style={{ marginLeft: '30px' }}>
           <Link

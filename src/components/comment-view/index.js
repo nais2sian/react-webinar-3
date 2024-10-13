@@ -14,7 +14,6 @@ const CommentView = ({
   renderReply,
 }) => {
   const formRef = useRef(null);
-
   useEffect(() => {
     if (isReplying && formRef.current) {
       formRef.current.scrollIntoView({ behavior: 'smooth', block: 'center' });

@@ -16,9 +16,7 @@ const CommentContainer = ({ comment, onReply, level = 0 }) => {
 
   const replyTo = useReduxSelector(state => state.reviews.replyTo);
   const isReplying = replyTo === comment._id;
-
   const isCurrentUser = comment.author?.['_id'] === select.userId;
-
   const handleCancel = () => {
     dispatch(reviewsActions.clearReplyTo());
   };
@@ -28,6 +26,7 @@ const CommentContainer = ({ comment, onReply, level = 0 }) => {
   );
 
   return (
+    <div>
     <CommentView
       comment={comment}
       onReply={onReply}
@@ -38,6 +37,7 @@ const CommentContainer = ({ comment, onReply, level = 0 }) => {
       handleCancel={handleCancel}
       renderReply={renderReply}
     />
+    </div>
   );
 };
 

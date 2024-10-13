@@ -24,7 +24,7 @@ export default {
     };
   },
 
-  addNewComment: (targetId, text, targetType, currentUser) => {
+  addNewComment: (targetId, text, targetType, currentUser, id) => {
     const token = localStorage.getItem('token');
     return async dispatch => {
       dispatch({ type: 'reviews/add-start' });
@@ -46,6 +46,7 @@ export default {
         const newComment = res.data.result;
         if (currentUser) {
           newComment.author = {
+            _id: id,
             profile: {
               name: currentUser,
             },
