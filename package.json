@@ -17,7 +17,7 @@
   "bugs": {
     "url": "https://github.com/ylabio/react-webinar-3/issues"
   },
-  "homepage": "https://github.com/ylabio/react-webinar-3#readme",
+  "homepage": "https://nais2sian.github.io/react-webinar-3",
   "dependencies": {
     "@bem-react/classname": "^1.6.0",
     "axios": "^1.7.7",
