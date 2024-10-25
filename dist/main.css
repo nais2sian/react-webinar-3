@@ -1,0 +1,524 @@
+.Menu {
+  display: flex;
+  list-style: none;
+  justify-content: flex-start;
+  padding: 20px;
+  margin: 0;
+  font-size: 18px;
+}
+
+.Menu-item {
+  display: block;
+  padding: 2px 4px 3px 2px;
+  margin: 0 2px;
+}
+
+.Menu-item:first-child {
+  margin-left: 0;
+  padding-left: 0;
+}
+
+.Menu-item:last-child {
+  margin-right: 0;
+  padding-right: 0;
+}
+
+/* Контрол с общими действиями */
+.BasketTool {
+  display: flex;
+  justify-content: flex-end;
+  padding: 20px;
+  font-size: 18px;
+}
+
+.BasketTool-label {
+}
+
+.BasketTool-total {
+  font-weight: bold;
+  margin: 0 20px;
+}
+
+.SideLayout {
+  display: flex;
+  flex-wrap: nowrap;
+  justify-content: flex-start;
+  padding: 0;
+  margin-left: -5px;
+  margin-right: -5px;
+  align-items: center;
+}
+
+.SideLayout_side_start {
+  justify-content: flex-start;
+}
+
+.SideLayout_side_end {
+  justify-content: flex-end;
+}
+
+.SideLayout_side_between {
+  justify-content: space-between;
+}
+
+.SideLayout_padding_small {
+  padding: 10px 20px;
+}
+
+.SideLayout_padding_medium {
+  padding: 20px;
+}
+
+.SideLayout-item {
+  margin: 0 5px;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  background: #535353;
+  font-family: sans-serif;
+}
+
+.PageLayout {
+  width: 1024px;
+  min-height: 100vh;
+  margin: 0 auto;
+  background: #fff;
+  box-sizing: border-box;
+  box-shadow: 0 0 15px 5px #0000003b;
+  padding-bottom: 92px;
+}
+
+.Head {
+  height: 80px;
+  background: #f5f5f5;
+  display: flex;
+  flex-wrap: nowrap;
+  padding: 0 15px;
+  align-items: center;
+  justify-content: space-between;
+  border-top: 1px solid #ccc;
+}
+
+.Head-place {
+  margin: 0 5px;
+}
+
+.Head h1 {
+  margin: 0;
+  padding: 20px 0 10px;
+}
+
+.Select {
+  font-size: 16px;
+  padding: 3px 2px 2px;
+}
+
+.Input {
+  font-size: 16px;
+  padding: 2px;
+}
+
+.Input_theme_big {
+  width: 300px;
+}
+
+.Item {
+  display: flex;
+  justify-content: flex-start;
+  transition: background-color 1s;
+  padding-left: 10px;
+}
+
+.Item_selected {
+  background: #75aaf1;
+  color: #fff;
+}
+
+.Item-code {
+  padding: 20px 10px 20px 20px;
+}
+
+.Item-title {
+  width: 100%;
+  padding: 20px 10px;
+}
+
+.Item-title a {
+  color: #000;
+  text-decoration: none;
+}
+
+.Item-title a:hover {
+  color: #000;
+  text-decoration: underline;
+}
+
+.Item-actions {
+  padding: 20px 20px 20px 10px;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 20px;
+}
+
+.Item-price {
+  padding: 0 0 0 10px;
+  white-space: nowrap;
+  font-size: 18px;
+}
+
+.List {
+}
+
+.List-item {
+  border-bottom: 1px dashed #ccc;
+}
+
+.List-item:first-child {
+  border-top: 1px dashed #ccc;
+}
+
+.Pagination {
+  display: flex;
+  list-style: none;
+  justify-content: flex-end;
+  padding: 24px 20px;
+  font-size: 16px;
+  margin: 0;
+}
+
+.Pagination-item {
+  display: block;
+  padding: 2px 4px 2px 2px;
+  margin: 0;
+  cursor: pointer;
+  height: 20px;
+  min-width: 20px;
+  box-sizing: border-box;
+  text-align: center;
+  line-height: 18px;
+}
+
+.Pagination-item a,
+.Pagination-item a:hover,
+.Pagination-item a:active {
+  text-decoration: none;
+  color: black;
+}
+
+.Pagination-item:hover {
+  background: #e1e1e1;
+}
+
+.Pagination-item_active,
+.Pagination-item_active:hover,
+.Pagination-item_active a,
+.Pagination-item_active a:hover {
+  background: #0087e9;
+  color: #fff;
+}
+
+.Pagination-item_split,
+.Pagination-item_split:hover {
+  background: transparent;
+  cursor: default;
+  color: #cccccc;
+}
+
+.Spinner {
+  opacity: 0.5;
+}
+
+/* Пункт списка */
+.ItemBasket {
+  display: flex;
+  justify-content: flex-start;
+  transition: background-color 1s;
+  padding-left: 10px;
+}
+
+.ItemBasket-code {
+  padding: 20px 10px 20px 20px;
+}
+
+.ItemBasket-title {
+  width: 100%;
+  padding: 20px 10px;
+}
+
+.ItemBasket-title a {
+  color: #000;
+  text-decoration: none;
+}
+
+.ItemBasket-title a:hover {
+  color: #000;
+  text-decoration: underline;
+}
+
+.ItemBasket-right {
+  padding: 20px 20px 20px 10px;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+}
+
+.ItemBasket-cell {
+  min-width: 95px;
+  text-align: right;
+  font-size: 18px;
+  white-space: nowrap;
+}
+
+body:has(.ModalLayout) {
+  overflow: hidden;
+}
+
+.ModalLayout {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  overflow-x: auto;
+  background: rgba(0, 0, 0, 0.7);
+  z-index: 9999;
+  padding: 10px;
+  min-height: 100%;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+}
+
+.ModalLayout-frame {
+  position: relative;
+  background: #ffffff;
+  margin: 0 auto;
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 2px 5px 10px rgb(0 0 0 / 5%);
+  min-width: 600px;
+  width: min(100%, 960px);
+}
+
+.ModalLayout-head {
+  height: 80px;
+  background: #f5f5f5;
+  display: flex;
+  /*align-items: stretch;*/
+  justify-content: space-between;
+  padding: 0 30px 0 20px;
+}
+
+.ModalLayout-close {
+  align-self: center;
+}
+
+.ModalLayout-title {
+  margin: 0;
+  padding: 20px 0 10px;
+}
+
+.ModalLayout-content {
+  min-height: 100px;
+  padding: 70px 0;
+}
+
+/* Итого в корзине */
+.BasketTotal {
+  display: flex;
+  justify-content: flex-end;
+  padding: 20px;
+}
+
+.BasketTotal-cell {
+  min-width: 85px;
+  text-align: right;
+  font-weight: bold;
+  font-size: 18px;
+  padding-left: 10px;
+  white-space: nowrap;
+}
+
+.ArticleCard {
+  padding: 20px 40px;
+}
+
+.ArticleCard-description {
+  font-size: 18px;
+  margin: 20px 0;
+}
+
+.ArticleCard-prop {
+  margin: 20px 0;
+  display: flex;
+  justify-content: flex-start;
+  font-size: 18px;
+}
+
+.ArticleCard-prop_size_big {
+  font-size: 24px;
+  font-weight: bold;
+}
+
+.ArticleCard-label {
+  padding-right: 10px;
+}
+
+.ArticleCard-value {
+  font-weight: bold;
+}
+
+.comments-form {
+  box-sizing: border-box;
+  min-height: 135px;
+  gap: 0px;
+  display: flex;
+  flex-direction: column;
+  padding: 0 0px 30px 0px;
+  position: relative;
+  right: 0;
+  max-width: 100%;
+}
+
+.comments-form-header {
+  font-family: Arial;
+  font-size: 12px;
+  font-weight: 700;
+  line-height: 13.8px;
+  text-align: left;
+  margin: 0px;
+  margin-bottom: 10px;
+}
+
+.comments-form-textarea {
+  min-height: 80px;
+}
+
+.comments-form-button {
+  width: 90px;
+  margin-top: 10px;
+  margin-right: 10px;
+}
+
+.comments-form-cancel-button {
+  width: 67px;
+  margin-top: 10px;
+}
+
+.comment-author--current {
+  color: #666666;
+}
+
+.comment-item {
+  margin-bottom: 30px;
+  font-family: Arial;
+  font-weight: 400;
+}
+
+.comments-header {
+  margin: 30px 0 25px;
+  font-size: 24px;
+  line-height: 27.6px;
+}
+
+.comment-author {
+  font-weight: 700;
+  font-size: 12px;
+  line-height: 13.8px;
+}
+
+.comment-date {
+  color: #666666;
+  font-size: 12px;
+  line-height: 13.8px;
+}
+
+.comment-text {
+  margin: 10px 0;
+  font-size: 14px;
+  line-height: 16.1px;
+  white-space: normal;
+  word-break: break-word;
+  word-wrap: break-word;
+}
+
+.comment-replies {
+  margin-left: 0px;
+}
+
+.reply-button {
+  border: none;
+  padding: 0;
+  color: #0087e9;
+  font-size: 12px;
+  line-height: 13.8px;
+  background-color: transparent;
+  cursor: pointer;
+}
+
+.comment-warn {
+  font-family: Arial;
+  font-size: 16px;
+  font-weight: 400;
+  line-height: 18.4px;
+  text-align: left;
+  color: #0087e9;
+}
+
+.comments-form-cancel-link {
+  color: #666666;
+}
+
+h3 {
+  font-family: Arial;
+  font-size: 24px;
+  font-weight: 400;
+  line-height: 27.6px;
+  text-align: left;
+}
+
+.Field {
+  margin: 20px 0;
+}
+
+.Field-label {
+}
+
+.Field_input {
+}
+
+.Field-error {
+  color: #f00;
+}
+
+.ProfileCard {
+  padding: 20px 20px;
+}
+
+.ProfileCard-title {
+  margin-top: 0;
+}
+
+.ProfileCard-prop {
+  margin: 20px 0;
+  display: flex;
+  justify-content: flex-start;
+}
+
+.ProfileCard-prop_size_big {
+  font-size: 24px;
+}
+
+.ProfileCard-label {
+  padding-right: 5px;
+}
+
+.ProfileCard-value {
+  font-weight: bold;
+}
+
